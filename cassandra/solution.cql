@@ -9,7 +9,7 @@ create keyspace my_ks with replication = {'class': 'SimpleStrategy', 'replicatio
 
 use my_ks;
 
---Создание таблицы
+--Создание таблиц
 create table user_posts
 (
     user_id         int,
@@ -21,6 +21,19 @@ create table user_posts
     content         text,
     PRIMARY KEY (user_id, created_at)
 ) with clustering order by (created_at desc)
+
+create table topic_posts
+(
+    user_id         int,
+    username        text,
+    post_id         int,
+    topic_id        int,
+    created_at      timestamp,
+    created_date    date,
+    content         text,
+    PRIMARY KEY ((topic_id, created_date), created_at)
+) with clustering order by (created_at desc)
+
 
 --Заполнение таблицы тестовыми данными
 insert into user_posts(user_id, username, post_id, topic_id, created_at, created_date, content)
@@ -66,5 +79,5 @@ where user_id = 3 and created_at > '2023-10-03 07:00+0000';
 
 --Запрос 4
 select user_id, username, post_id, created_at
-from user_posts
+from topic_posts
 where topic_id = 2 and created_date = '2023-10-02';
